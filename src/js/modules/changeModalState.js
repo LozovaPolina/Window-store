@@ -37,6 +37,8 @@ const changeModalState = (state) => {
                         break;
                 }
                 cheakToSubmit(button);
+                console.log(state);
+
 
             });
 
@@ -59,7 +61,7 @@ const changeModalState = (state) => {
             btn.removeAttribute('disabled');
         }
     }
-    
+
 
     buttonToggleDisable('.popup_calc_button', true);
     buttonToggleDisable('.popup_calc_profile_button', true);

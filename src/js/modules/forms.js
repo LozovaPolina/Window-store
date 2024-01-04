@@ -1,10 +1,9 @@
 import checkNumInputs from "./checkNumInputs";
-
+import { windowClose } from "./modals";
 const forms = (state) => {
 
     const form = document.querySelectorAll('form'),
-        inputs = document.querySelectorAll('input'),
-        buttons = document.querySelectorAll('[type="submit"]');
+        inputs = document.querySelectorAll('input');
 
 
 
@@ -34,25 +33,11 @@ const forms = (state) => {
 
 
     form.forEach(item => {
-        // item.addEventListener('change', (e) => {
-        //     inputs.forEach(input => {
-        //         input.addEventListener('input', (e) => {
-        //             if (!input.value) {
-        //                 buttons.forEach(button => {
-        //                     button.setAttribute('disabled', true );
-        //                 });
-        //             } else {
-        //                 buttons.forEach(button => {
-        //                     button.removeAttribute('disabled')
-        //                 });
-        //             }
-        //         })
-        //     })
-        // })
+
 
         item.addEventListener('submit', (e) => {
             e.preventDefault();
-
+            
 
             let statuMessege = document.createElement('div');
             statuMessege.classList.add('status');
@@ -60,9 +45,13 @@ const forms = (state) => {
 
 
             const formData = new FormData(item);
+            
             if (item.getAttribute('data-calc') === 'end') {
                 for (let key in state) {
                     formData.append(key, state[key])
+                }
+                for (let key in state) {
+                    delete state[key];
                 }
             }
             postData('assets/server.php', formData)
@@ -74,7 +63,9 @@ const forms = (state) => {
                     crearInput();
                     setTimeout(() => {
                         statuMessege.remove();
-                    }, 3000);
+                        windowClose();
+                    }, 1000);
+                    
                 });
         });
     });
