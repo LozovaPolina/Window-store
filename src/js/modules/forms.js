@@ -1,21 +1,15 @@
-const forms = () => {
+import checkNumInputs from "./checkNumInputs";
+
+const forms = (state) => {
+
     const form = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
-        phoneInputs = document.querySelectorAll('input[name="user_phone"]')
+        buttons = document.querySelectorAll('[type="submit"]');
 
-    phoneInputs.forEach(input => {
-        input.addEventListener('input', (e) => {
-            let value = input.value
-            input.value = input.value.replace(/\D/, '');
-            
-            if ((value.length > 11) || (value.length < 9)) {
-                input.style.border = '1px solid red';
-                return false
-            } else {
-                input.style.border = '1px solid green';
-            }
-        });
-    });
+
+
+    checkNumInputs('input[name="user_phone"]');
+
 
     const message = {
         loading: 'Загрузка',
@@ -38,7 +32,24 @@ const forms = () => {
         });
     };
 
+
     form.forEach(item => {
+        // item.addEventListener('change', (e) => {
+        //     inputs.forEach(input => {
+        //         input.addEventListener('input', (e) => {
+        //             if (!input.value) {
+        //                 buttons.forEach(button => {
+        //                     button.setAttribute('disabled', true );
+        //                 });
+        //             } else {
+        //                 buttons.forEach(button => {
+        //                     button.removeAttribute('disabled')
+        //                 });
+        //             }
+        //         })
+        //     })
+        // })
+
         item.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -49,7 +60,11 @@ const forms = () => {
 
 
             const formData = new FormData(item);
-
+            if (item.getAttribute('data-calc') === 'end') {
+                for (let key in state) {
+                    formData.append(key, state[key])
+                }
+            }
             postData('assets/server.php', formData)
                 .then(res => {
                     statuMessege.textContent = message.success;
@@ -62,7 +77,7 @@ const forms = () => {
                     }, 3000);
                 });
         });
-
     });
 };
+
 export default forms;
